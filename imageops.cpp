@@ -4,7 +4,17 @@
 #include <iostream>
 #include "Image.h"
 
+using namespace std;
+
 int main() {
     std::cout << "Hello, World!" << std::endl;
+
+    ACTSHA001::Image image;
+    image.loadImage("Lenna_standard.pgm");
+    image.saveImage("Lenna_standard_copy.pgm");
+
+
+    cout<<"loaded image"<<endl;
+
     return 0;
 }

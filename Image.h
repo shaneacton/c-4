@@ -6,31 +6,37 @@
 #define IMAGEMANIPULATION_IMAGE_H
 
 #include <string>
+#include <vector>
+
 
 namespace ACTSHA001 {
     class Image{
 
     private:
-        unsigned char** image;
+        //unsigned char** image;
+        std::vector<unsigned char*> image;
+        int width;
+        int height;
 
-        void loadImage(std::string file);
-        void saveImage(std::string file);
+        bool checkCompatible(const Image & lhs , const Image & rhs );
 
 
 
 
     public:
-        Image & operator+(const Image & rhs);
+        void loadImage(std::string file);
+        void saveImage(std::string file);
+
+        Image & operator+(const Image & rhs );
         Image & operator-(const Image & rhs );
-        Image & operator!(const Image & rhs );
+        Image & operator!();
         Image & operator/(const Image & rhs );
         Image & operator*(const int & f);
-        Image & operator<<();
-        Image & operator>>();
+        //Image & operator<<();
+        //Image & operator>>();
 
 
         Image();//default constructor
-        Image(int width, int height);
 
     };
 }

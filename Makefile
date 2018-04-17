@@ -1,18 +1,13 @@
 # Declare some variables to help construct our compile command
 CC=g++         # the compiler
-LIBS=-lm       # the libraries we will ref
 
-main: main.o
-	$(CC) -o main main.o volimage.o -std=c++11
+imageops: imageops.o
+	$(CC) -o imageops imageops.o Image.o -std=c++11
 
-main.o: main.cpp volimage.o
-	$(CC) -c main.cpp volimage.h -std=c++11
+imageops.o: imageops.cpp Image.o
+	$(CC) -c imageops.cpp Image.h -std=c++11
 	
-volimage.o: volimage.cpp volimage.h
-		$(CC) -c volimage.cpp -std=c++11
-
-
-run: main
-	./main
+Image.o: Image.cpp Image.h
+		$(CC) -c Image.cpp -std=c++11
 
 
