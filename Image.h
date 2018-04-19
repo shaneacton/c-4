@@ -15,14 +15,13 @@ namespace ACTSHA001 {
 
     private:
         //unsigned char** image;
-        std::vector<unsigned char*> image;
         std::unique_ptr<unsigned char[]> data;
 
         int width;
         int height;
 
-        bool checkCompatible(const Image & lhs , const Image & rhs );
-        unsigned char clamp(const int & i);
+        bool  checkCompatible (const Image & lhs , const Image & rhs ) const;
+        unsigned char clamp(const int & i) const;
 
 
 
@@ -32,11 +31,13 @@ namespace ACTSHA001 {
         void loadImage(std::string file);
         void saveImage(std::string file);
 
-        Image & operator+(const Image & rhs );
+        Image & operator+(const Image & rhs ) const;
         Image & operator-(const Image & rhs );
         Image & operator!();
         Image & operator/(const Image & rhs );
         Image & operator*(const int & f);
+        Image &  operator = ( const Image & );
+        Image (const Image &obj);
         //Image & operator<<();
         //Image & operator>>();
 
@@ -64,8 +65,8 @@ namespace ACTSHA001 {
 // other methods for iterator
         };
 
-        iterator begin(void) { return iterator(data.get());}
-        iterator end(void) { return iterator(&data.get()[width*height]);}
+         iterator begin(void) const { return iterator(&data.get()[0]);}
+         iterator End(void) const { return iterator(&data.get()[width*height]);}//capital because c++
 
     };
 }

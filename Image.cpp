@@ -17,27 +17,40 @@ ACTSHA001::Image::Image() {
     width=0;
 }
 
-ACTSHA001::Image& ACTSHA001::Image::operator+(const ACTSHA001::Image &rhs) {
-    Image im;
-    im.width = width;
-    im.height = height;
+ACTSHA001::Image im;
+
+ACTSHA001::Image& ACTSHA001::Image::operator+(const ACTSHA001::Image &rhs) const {
+    //Image im;
+
+    im = Image(*this);
+
     if(checkCompatible(*this,rhs)){
-        for(int row=0;row<height;row++){
-            im.image.push_back(new unsigned char[width]);
-            for(int col=0;col,width;col++){
-                int num = clamp((*this).image[row][col] + rhs.image[row][col]);
-                cout<<"summing values " << (int)((*this).image[row][col]) << " + " << (int)(rhs.image[row][col]) << " = " << num << endl;
-                im.image[row][col] = (unsigned char)num;
-            }
+
+        //int count=0;
+        iterator rhit = rhs.begin();
+        iterator resit = im.begin();
+        int count = 0;
+        for(auto it = begin(); it!= End();++it){
+            //out.put(*it);
+            //cout<<"lhs char val: " << (int)*it << " rhs char value: " << (int)*rhit << " result val = "<<  (int)(unsigned char)clamp(*it + *rhit) <<endl;
+            //cout<<"before: "<< (int)*resit;
+            *resit = (unsigned char)clamp(*it + *rhit);
+            //cout<<" after: "<< (int)*resit<<endl;
+            ++rhit;
+            ++resit;
+            count++;
         }
+        cout<<"added " << count<< " chars together"<<endl;
     }
+
+    return im;
 }
 
-unsigned char ACTSHA001::Image::clamp(const int &i) {
+unsigned char ACTSHA001::Image::clamp(const int &i) const{
     return (unsigned char)min(255,max(0,i));
 }
 
-bool ACTSHA001::Image::checkCompatible(const ACTSHA001::Image &lhs, const ACTSHA001::Image &rhs) {
+ bool  ACTSHA001::Image::checkCompatible  (const ACTSHA001::Image &lhs, const ACTSHA001::Image &rhs) const {
     if(height==rhs.height && width==rhs.width){
         return true;
     }else{
@@ -68,53 +81,73 @@ void ACTSHA001::Image::loadImage(std::string fileName){
 
     getline(file,line);
 
-    iterator it = begin();
-    for(int row=0;row<height;row++){
-        image.push_back(new unsigned char[width]);
-        file.read((char*)image[row],width);
-        //cout<< "finished "<< (row+1) << endl;
-        for(int col=0;col++;col<width){
-            *it = image[row][col];
-            ++it;
-        }
+    //int count=0;
+    for(auto it = begin(); it!= End();++it){
+        //out.put(*it);
+        *it = (unsigned char)file.get();
+        //count++;
     }
 
+
+    //cout<<"read "<<count<<" chars to image"<<endl;
+
     file.close();
+    cout<<"loaded image"<<endl;
 
 }
 
 void ACTSHA001::Image::saveImage(std::string fileName) {
-    ofstream out("images/"+fileName);
+    ofstream out("images/"+fileName, ios::binary);
     if(height==0||width==0){
         cout<<"no image loaded to this object"<<endl;
         return;
     }
-    /**
-    out.write("P5\n",3);
-    out.write("#\n",2);
-    string dims = to_string(height) + " " + to_string(width) ;
-    cout<<"'"<<dims<<"'"<<endl;
-    out.write("dims\n",dims.size()+1);
-    out.write("255\n",4);
-*/
+
+    out<<"P5"<<endl;
+    out<<"#"<<endl;
+    out<<(to_string(height) + " " + to_string(width))<<endl;
+    out<<"255"<<endl;
 
 
-    iterator it = begin();
-    for(auto it = begin(); it!= end();++it){
+
+    //int count=0;
+    for(auto it = begin(); it!= End();++it){
         out.put(*it);
-        ++it;
+        //count++;
     }
-/**
-    for(int row=0;row<height;row++){
-        out.write((char*)image[row],width);
-        //cout<< "finished "<< (row+1) << endl;
-    }
-*/
+    //cout<<"wrote "<<count<<" chars to image"<<endl;
+
+    cout<<"saved image"<<endl;
+
     out.close();
 }
 
+
+ACTSHA001::Image& ACTSHA001::Image::operator=(const ACTSHA001::Image & rhs) {
+    cout<<"copy assign called"<<endl;
+    height = rhs.height;
+    width = rhs.width;
+    data = unique_ptr<unsigned char[]>(new unsigned char[rhs.width*rhs.height]);
+    cout<<"dimensions copied"<<endl;
+    //data = move(rhs.data);
+    iterator newit = begin();
+    cout<<"created newit"<<endl;
+
+    for(auto it = rhs.begin(); it!= rhs.End();++it){
+        *newit = *it;
+        ++newit;
+    }
+    cout<<"finished copy assign"<<endl;
+    return *this;
+}
+
+
+ACTSHA001::Image::Image(const ACTSHA001::Image &rhs):width(rhs.width), height(rhs.height) {
+    data = unique_ptr<unsigned char[]>(new unsigned char[rhs.width*rhs.height]);
+}
+
 ACTSHA001::Image::iterator& ACTSHA001::Image::iterator::operator++() {
-    ptr+= sizeof(char);
+    ptr+= sizeof(unsigned char);
     return *this;
 }
 ACTSHA001::Image::iterator& ACTSHA001::Image::iterator::operator--() {

@@ -14,7 +14,17 @@ int main() {
     image.saveImage("Lenna_standard_copy.pgm");
 
 
-    cout<<"loaded image"<<endl;
+    ACTSHA001::Image im2;
+    im2.loadImage("Lenna_standard.pgm");
+
+    ACTSHA001::Image im3;
+
+
+
+    im3 = (im2+image);
+    cout<<"added size: " << sizeof(im3) <<endl;
+
+    im3.saveImage("testadd.pgm");
 
     return 0;
 }
