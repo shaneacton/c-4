@@ -46,6 +46,75 @@ ACTSHA001::Image& ACTSHA001::Image::operator+(const ACTSHA001::Image &rhs) const
     return im;
 }
 
+ACTSHA001::Image& ACTSHA001::Image::operator-(const ACTSHA001::Image &rhs) const {
+    //Image im;
+
+    im = Image(*this);
+
+    if(checkCompatible(*this,rhs)){
+
+        iterator rhit = rhs.begin();
+        iterator resit = im.begin();
+        int count = 0;
+        for(auto it = begin(); it!= End();++it){
+            *resit = (unsigned char)clamp(*it - *rhit);
+            ++rhit;
+            ++resit;
+        }
+    }
+
+    return im;
+}
+
+ACTSHA001::Image& ACTSHA001::Image::operator!() {
+    im = Image(*this);
+    iterator newit = im.begin();
+    for(auto it = begin(); it!= End();++it){
+        *newit = (unsigned char)(255-*it);
+        ++newit;
+    }
+
+    return im;
+}
+
+ACTSHA001::Image& ACTSHA001::Image::operator/(const ACTSHA001::Image &rhs) {
+
+    im = Image(*this);
+
+    if(checkCompatible(*this,rhs)){
+
+        iterator rhit = rhs.begin();
+        iterator resit = im.begin();
+        for(auto it = begin(); it!= End();++it){
+            if(*rhit == 255){
+                *resit = (unsigned char)*it;
+            }else{
+                *resit = (unsigned char)0;
+            }
+            ++rhit;
+            ++resit;
+        }
+    }
+
+    return im;
+}
+
+ACTSHA001::Image& ACTSHA001::Image::operator*(const int &f) {
+    im = Image(*this);
+
+
+        iterator resit = im.begin();
+        for(auto it = begin(); it!= End();++it){
+            if(*it > f){
+                *resit = (unsigned char)255;
+            }else{
+                *resit = (unsigned char)0;
+            }
+            ++resit;
+        }
+    return im;
+}
+
 unsigned char ACTSHA001::Image::clamp(const int &i) const{
     return (unsigned char)min(255,max(0,i));
 }
@@ -144,6 +213,12 @@ ACTSHA001::Image& ACTSHA001::Image::operator=(const ACTSHA001::Image & rhs) {
 
 ACTSHA001::Image::Image(const ACTSHA001::Image &rhs):width(rhs.width), height(rhs.height) {
     data = unique_ptr<unsigned char[]>(new unsigned char[rhs.width*rhs.height]);
+    iterator newit = begin();
+    //cout<<"created newit"<<endl;
+    for(auto it = rhs.begin(); it!= rhs.End();++it){
+        *newit = *it;
+        ++newit;
+    }
 }
 
 ACTSHA001::Image::iterator& ACTSHA001::Image::iterator::operator++() {

@@ -11,7 +11,10 @@ int main() {
 
     ACTSHA001::Image image;
     image.loadImage("Lenna_standard.pgm");
-    image.saveImage("Lenna_standard_copy.pgm");
+    //image.saveImage("Lenna_standard_copy.pgm");
+    ACTSHA001::Image mask;
+    //mask.loadImage("Lenna_hat_mask.pgm");
+
 
 
     ACTSHA001::Image im2;
@@ -19,12 +22,17 @@ int main() {
 
     ACTSHA001::Image im3;
 
-
-
     im3 = (im2+image);
-    cout<<"added size: " << sizeof(im3) <<endl;
 
     im3.saveImage("testadd.pgm");
+    (im2-image).saveImage("should_be_black.pgm");
+    (im3-im2).saveImage("should_be_normal.pgm");
+
+    (!im2).saveImage("inverse.pgm");
+
+    //(im2/mask).saveImage("test_mask.pgm");
+    (!(im2*100) + im2).saveImage("thresh.pgm");
+
 
     return 0;
 }

@@ -32,7 +32,7 @@ namespace ACTSHA001 {
         void saveImage(std::string file);
 
         Image & operator+(const Image & rhs ) const;
-        Image & operator-(const Image & rhs );
+        Image & operator-(const Image & rhs ) const;
         Image & operator!();
         Image & operator/(const Image & rhs );
         Image & operator*(const int & f);
