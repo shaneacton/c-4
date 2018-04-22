@@ -23,13 +23,11 @@ namespace ACTSHA001 {
         bool  checkCompatible (const Image & lhs , const Image & rhs ) const;
         unsigned char clamp(const int & i) const;
 
+        void loadImage(std::string file);
+        void saveImage(std::string file);
 
 
     public:
-
-
-        void loadImage(std::string file);
-        void saveImage(std::string file);
 
         Image & operator+(const Image & rhs ) const;
         Image & operator-(const Image & rhs ) const;
@@ -38,8 +36,8 @@ namespace ACTSHA001 {
         Image & operator*(const int & f);
         Image &  operator = ( const Image & );
         Image (const Image &obj);
-        //Image & operator<<();
-        //Image & operator>>();
+        void operator<<(const std::string name);//read eg im<<"test"
+        void operator>>(const std::string name);//write eg im>>"out
 
 
         Image();//default constructor

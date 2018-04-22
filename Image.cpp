@@ -129,9 +129,9 @@ unsigned char ACTSHA001::Image::clamp(const int &i) const{
 }
 
 void ACTSHA001::Image::loadImage(std::string fileName){
-    cout<<"attempting to load image: " << fileName<<endl;
+    //cout<<"attempting to load image: " << fileName<<endl;
 
-    ifstream file("images/"+fileName, ios::in | ios::binary);
+    ifstream file("images/"+fileName+".pgm", ios::in | ios::binary);
 
     string line;
     getline(file,line);
@@ -157,16 +157,15 @@ void ACTSHA001::Image::loadImage(std::string fileName){
         //count++;
     }
 
-
     //cout<<"read "<<count<<" chars to image"<<endl;
 
     file.close();
-    cout<<"loaded image"<<endl;
+    cout<<"loaded image "<<fileName<<endl;
 
 }
 
 void ACTSHA001::Image::saveImage(std::string fileName) {
-    ofstream out("images/"+fileName, ios::binary);
+    ofstream out("images/"+fileName+".pgm", ios::binary);
     if(height==0||width==0){
         cout<<"no image loaded to this object"<<endl;
         return;
@@ -193,20 +192,20 @@ void ACTSHA001::Image::saveImage(std::string fileName) {
 
 
 ACTSHA001::Image& ACTSHA001::Image::operator=(const ACTSHA001::Image & rhs) {
-    cout<<"copy assign called"<<endl;
+    //cout<<"copy assign called"<<endl;
     height = rhs.height;
     width = rhs.width;
     data = unique_ptr<unsigned char[]>(new unsigned char[rhs.width*rhs.height]);
-    cout<<"dimensions copied"<<endl;
+    //cout<<"dimensions copied"<<endl;
     //data = move(rhs.data);
     iterator newit = begin();
-    cout<<"created newit"<<endl;
+    //cout<<"created newit"<<endl;
 
     for(auto it = rhs.begin(); it!= rhs.End();++it){
         *newit = *it;
         ++newit;
     }
-    cout<<"finished copy assign"<<endl;
+    //cout<<"finished copy assign"<<endl;
     return *this;
 }
 
@@ -238,4 +237,12 @@ unsigned char & ACTSHA001::Image::iterator::operator*() {
 }
 bool ACTSHA001::Image::iterator::operator!=(const iterator & rhs) {
     return ptr!=rhs.ptr;
+}
+
+void ACTSHA001::Image::operator<<(const std::string name) {
+    loadImage(name);
+}
+
+void ACTSHA001::Image::operator>>(const std::string name) {
+    saveImage(name);
 }
