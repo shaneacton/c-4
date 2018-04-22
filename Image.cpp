@@ -40,7 +40,7 @@ ACTSHA001::Image& ACTSHA001::Image::operator+(const ACTSHA001::Image &rhs) const
             ++resit;
             count++;
         }
-        cout<<"added " << count<< " chars together"<<endl;
+        //cout<<"added " << count<< " chars together"<<endl;
     }
 
     return im;
@@ -145,7 +145,7 @@ void ACTSHA001::Image::loadImage(std::string fileName){
     width = stoi(tokens[1]);
     height = stoi(tokens[0]);
 
-    cout<<"width: " <<width << "  height: " << height << endl;
+    //cout<<"width: " <<width << "  height: " << height << endl;
     data = unique_ptr<unsigned char[]>(new unsigned char[width*height]);
 
     getline(file,line);

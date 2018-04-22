@@ -28,10 +28,46 @@ int main(int argc, char* argv[]) {
 
     }else{
         for(int i=0;i<argc;i++){
-            cout<<argv[i]<<endl;
+            //cout<<argv[i]<<endl;
         }
 
         string op = argv[1];
+        string out;
+        ACTSHA001::Image l1;
+        ACTSHA001::Image l2;
+
+        l1 << argv[2];
+        if(op != "-i" && op != "-t"){
+            l2<< argv[3];
+            out = argv[4];
+            if(op == "-a"){
+                cout<<"adding images"<<endl;
+                (l1+l2)>>out;
+            }
+            if(op == "-s"){
+                cout<<"subtracting images"<<endl;
+                (l1-l2)>>out;
+            }
+            if(op == "-l"){
+                cout<<"masking images"<<endl;
+                (l1/l2)>>out;
+            }
+        }else{
+            if(op == "-i"){
+                out = argv[3];
+
+                cout<<"inverting image"<<endl;
+                (!l1)>>out;
+            }
+            if(op == "-t"){
+                int f = stoi(argv[3]);
+                out = argv[4];
+
+                cout<<"applying threshold to image"<<endl;
+                (l1*f)>>out;
+            }
+        }
+
 
     }
 
